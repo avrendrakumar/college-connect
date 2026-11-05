@@ -113,4 +113,4 @@ This project includes Vercel configuration.
 
 ## License
 
-No open-source license has been assigned yet. Contact the project owner for permission before redistribution or commercial use.
+No open-source license has been assigned yet. Contact ME for permission before redistribution or commercial use.
