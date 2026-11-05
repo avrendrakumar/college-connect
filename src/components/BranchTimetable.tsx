@@ -10,7 +10,7 @@ import {
   Printer,
   User
 } from 'lucide-react';
-import { Branch, BranchId, DayOfWeek, Period, TimetableSlot } from '../types';
+import { Branch, BranchId, DayOfWeek, Period, Room, TimetableSlot } from '../types';
 import { DAYS_OF_WEEK, timeStringToMinutes } from '../utils/timeEngine';
 
 interface BranchTimetableProps {
@@ -22,6 +22,7 @@ interface BranchTimetableProps {
   activePeriod?: Period;
   currentMinutes: number;
   isOpen: boolean;
+  rooms?: Room[];
 }
 
 export const BranchTimetable: React.FC<BranchTimetableProps> = ({
@@ -32,8 +33,12 @@ export const BranchTimetable: React.FC<BranchTimetableProps> = ({
   setActiveDay,
   activePeriod,
   currentMinutes,
-  isOpen
+  isOpen,
+  rooms = []
 }) => {
+  // Show the room's display name; fall back to the stored value if no matching room exists
+  const roomLabel = (id: string) => rooms.find((r) => String(r.id) === String(id))?.name || id;
+
   const [pickedBranchId, setSelectedBranchId] = useState<BranchId>('');
   const [semesterFilter, setSemesterFilter] = useState<string>('ALL');
   // Fall back to the first real branch when nothing (or a removed branch) is selected
@@ -78,7 +83,7 @@ export const BranchTimetable: React.FC<BranchTimetableProps> = ({
         `${p.start} - ${p.end}`,
         slot ? slot.subject : 'Free / Self Study',
         slot ? slot.teacher : '-',
-        slot ? slot.roomId : '-',
+        slot ? roomLabel(slot.roomId) : '-',
         slot ? slot.type : '-'
       ];
     });
@@ -381,7 +386,7 @@ export const BranchTimetable: React.FC<BranchTimetableProps> = ({
                           </div>
                           <div className="flex items-center gap-2">
                             <MapPin className="h-3.5 w-3.5 shrink-0" />
-                            <span className="font-bold">{slot.roomId}</span>
+                            <span className="font-bold">{roomLabel(slot.roomId)}</span>
                           </div>
                         </div>
                       </div>
@@ -467,7 +472,7 @@ export const BranchTimetable: React.FC<BranchTimetableProps> = ({
                           </div>
                           <div className="flex shrink-0 items-center gap-2 self-start rounded-xl border-2 border-[var(--ink)] bg-[var(--paper)] px-3 py-1.5 text-sm font-bold sm:self-auto">
                             <MapPin className="h-3.5 w-3.5" />
-                            <span>{slot.roomId}</span>
+                            <span>{roomLabel(slot.roomId)}</span>
                           </div>
                         </div>
                       ) : (
