@@ -1,0 +1,303 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * College Connect look: a screen-printed campus poster.
+ * Two flat inks (blue and orange) over newsprint, hard offset shadows like a misregistered print,
+ * chunky rounded "sticker" shapes and a wide display face. Palette names:
+ *   paper  #EEF0F7  newsprint            ink    #15163A  blue-black
+ *   blue   #2D3CE6  riso blue (actions)  orange #FF5B2E  riso orange (accent, alerts)
+ *   yellow #FFD21F  highlighter          mint   #14B38B  "free / open"
+ * Remapping Tailwind's palette here restyles every screen (public pages and admin) at once.
+ */
+@theme {
+  --font-sans: 'Familjen Grotesk', system-ui, -apple-system, sans-serif;
+  --font-display: 'Unbounded', 'Familjen Grotesk', system-ui, sans-serif;
+  --font-mono: 'DM Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  --color-slate-50: #f4f5fa;
+  --color-slate-100: #e8eaf4;
+  --color-slate-200: #d5d8ea;
+  --color-slate-300: #b4b9d6;
+  --color-slate-400: #8a90b8;
+  --color-slate-500: #62688f;
+  --color-slate-600: #474c75;
+  --color-slate-700: #323760;
+  --color-slate-800: #22254d;
+  --color-slate-900: #15163a;
+  --color-slate-950: #0e0f2b;
+
+  --color-indigo-50: #eef0ff;
+  --color-indigo-100: #dde1ff;
+  --color-indigo-200: #bfc6ff;
+  --color-indigo-300: #98a2ff;
+  --color-indigo-400: #6a77f5;
+  --color-indigo-500: #4655ec;
+  --color-indigo-600: #2d3ce6;
+  --color-indigo-700: #2230c2;
+  --color-indigo-800: #1d2999;
+  --color-indigo-900: #1a2478;
+  --color-indigo-950: #0f1546;
+
+  --color-teal-50: #e6faf4;
+  --color-teal-100: #c4f2e4;
+  --color-teal-200: #92e5cd;
+  --color-teal-300: #55d3b0;
+  --color-teal-400: #2cc19b;
+  --color-teal-500: #14b38b;
+  --color-teal-600: #0e8f70;
+  --color-teal-700: #0f725b;
+  --color-teal-800: #105b49;
+  --color-teal-900: #0f4a3c;
+  --color-teal-950: #072b23;
+
+  --radius-lg: 10px;
+  --radius-xl: 14px;
+  --radius-2xl: 18px;
+  --radius-3xl: 26px;
+
+  /* Hard offset shadows, like a second ink layer printed slightly off. */
+  --shadow-sm: 0 1px 0 rgb(21 22 58 / 0.18);
+  --shadow-md: 2px 2px 0 rgb(21 22 58 / 0.9);
+  --shadow-lg: 3px 3px 0 rgb(21 22 58 / 0.9);
+  --shadow-xl: 4px 4px 0 rgb(21 22 58 / 0.9);
+  --shadow-2xl: 6px 6px 0 rgb(21 22 58 / 0.9);
+}
+
+:root {
+  --paper: #eef0f7;
+  --paper-2: #ffffff;
+  --ink: #15163a;
+  --blue: #2d3ce6;
+  --orange: #ff5b2e;
+  --yellow: #ffd21f;
+  --mint: #14b38b;
+  --dot: rgb(45 60 230 / 0.16);
+  --hard: #15163a;
+}
+
+.dark {
+  --paper: #11123a;
+  --paper-2: #1b1d52;
+  --ink: #f1f2fa;
+  --dot: rgb(255 91 46 / 0.16);
+  --hard: #05061f;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    background-color: var(--paper);
+    color: var(--ink);
+    font-optical-sizing: auto;
+  }
+
+  /* Dot screen printed in one corner, plus fine paper grain over everything. */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 100% 0%, var(--dot) 0 28%, transparent 28.5%) 0 0 / 14px 14px,
+      radial-gradient(ellipse 60% 40% at 100% 0%, #000 0%, transparent 100%);
+    background-blend-mode: normal;
+    mask-image: radial-gradient(ellipse 70% 55% at 100% 0%, #000 10%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 55% at 100% 0%, #000 10%, transparent 75%);
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+    opacity: 0.07;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+  .dark body::after {
+    mix-blend-mode: screen;
+    opacity: 0.05;
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background: var(--orange);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--orange);
+    outline-offset: 2px;
+  }
+}
+
+/* ---------- Building blocks used across the public pages ---------- */
+
+@layer components {
+/* A printed card: flat fill, inked outline, offset shadow. */
+.ticket {
+  background: var(--paper-2);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: 20px;
+  box-shadow: 5px 5px 0 var(--hard);
+}
+.dark .ticket {
+  border-color: rgb(241 242 250 / 0.85);
+  box-shadow: 5px 5px 0 var(--orange);
+}
+
+/* Smaller sticker label. */
+.sticker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.65rem;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.75rem;
+  background: var(--yellow);
+  color: #15163a;
+}
+.dark .sticker {
+  border-color: #15163a;
+}
+.sticker--blue { background: var(--blue); color: #fff; }
+.sticker--orange { background: var(--orange); color: #15163a; }
+.sticker--mint { background: var(--mint); color: #15163a; }
+.sticker--paper { background: var(--paper-2); color: var(--ink); }
+
+/* Pressable button: sinks into its shadow when pushed. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.1rem;
+  border: 2px solid #15163a;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 0.875rem;
+  background: var(--yellow);
+  color: #15163a;
+  box-shadow: 3px 3px 0 #15163a;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease;
+}
+.btn:hover { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 #15163a; }
+.btn:active { transform: translate(3px, 3px); box-shadow: 0 0 0 #15163a; }
+.btn--blue { background: var(--blue); color: #fff; }
+.btn--paper { background: var(--paper-2); color: var(--ink); }
+.dark .btn--paper { border-color: #15163a; color: #15163a; background: #f1f2fa; }
+}
+
+/* Headline printed in blue with the orange plate slipped to the right. */
+.misreg {
+  color: var(--blue);
+  text-shadow: 0.045em 0.045em 0 var(--orange);
+}
+.dark .misreg {
+  color: #f1f2fa;
+}
+
+/* Diagonal ruled fill for progress bars and empty states. */
+.hatch {
+  background-image: repeating-linear-gradient(-45deg, rgb(255 255 255 / 0.28) 0 6px, transparent 6px 12px);
+  background-size: 17px 17px;
+  animation: hatch-run 1.4s linear infinite;
+}
+@keyframes hatch-run { to { background-position: 17px 0; } }
+
+/* Halftone dot panel, for a quiet textured area. */
+.halftone {
+  background-image: radial-gradient(var(--dot) 28%, transparent 30%);
+  background-size: 10px 10px;
+}
+
+/* ---------- Motion ---------- */
+
+/* The one load sequence: each letter of the status word is stamped down in turn. */
+@keyframes stamp {
+  0% { opacity: 0; transform: translateY(-0.6em) scale(1.35) rotate(-6deg); }
+  60% { opacity: 1; transform: translateY(0.04em) scale(0.97) rotate(1deg); }
+  100% { opacity: 1; transform: none; }
+}
+.stamp-letter {
+  display: inline-block;
+  animation: stamp 0.5s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+}
+
+@keyframes bell-swing {
+  0%, 100% { transform: rotate(0); }
+  20% { transform: rotate(16deg); }
+  40% { transform: rotate(-13deg); }
+  60% { transform: rotate(8deg); }
+  80% { transform: rotate(-4deg); }
+}
+.bell:hover .bell-icon,
+.bell-ring { animation: bell-swing 0.7s ease-in-out; transform-origin: 50% 0; }
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 38s linear infinite;
+}
+.marquee:hover .marquee-track { animation-play-state: paused; }
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 currentColor; opacity: 1; }
+  100% { box-shadow: 0 0 0 10px currentColor; opacity: 0; }
+}
+.live-dot { position: relative; width: 10px; height: 10px; border-radius: 999px; background: currentColor; }
+.live-dot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  animation: pulse-ring 1.6s ease-out infinite;
+}
+
+/* Short answer to a click: a newly opened tab or dialog settles in. */
+@keyframes view-in {
+  from { opacity: 0; transform: translateY(10px) rotate(-0.3deg); }
+  to { opacity: 1; transform: none; }
+}
+.animate-fade-in { animation: view-in 0.28s ease-out both; }
+
+/* Kept for existing markup. */
+.glass-panel, .glass-card {
+  background: var(--paper-2);
+  border: 2px solid var(--ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stamp-letter, .animate-fade-in, .hatch, .bell-ring, .live-dot::after { animation: none; }
+  .marquee-track { animation: none; flex-wrap: wrap; width: auto; }
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: 0.01ms !important; }
+}
+
+/* Print Friendly Styles */
+@media print {
+  header, footer, nav, .no-print { display: none !important; }
+  body { background: white !important; color: black !important; }
+  body::before, body::after { display: none !important; }
+  .ticket { box-shadow: none !important; }
+  .print-area { width: 100% !important; margin: 0 !important; padding: 0 !important; }
+}
